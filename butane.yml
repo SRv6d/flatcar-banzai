@@ -1,0 +1,28 @@
+variant: flatcar
+version: 1.0.0
+storage:
+  filesystems:
+    - device: /dev/sdb
+      format: ext4
+      label: data1
+passwd:
+  users:
+    - name: marvin.vogt
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOELWzSrWOfYX4B7v0kYnIyQT3M3wVV1c6X+LpoJFDcI
+      groups: [sudo, docker]
+systemd:
+  units:
+    - name: mnt-data.mount
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Data mount
+
+        [Mount]
+        What=/dev/disk/by-label/data1
+        Where=/mnt/data
+        Type=ext4
+
+        [Install]
+        WantedBy=multi-user.target
