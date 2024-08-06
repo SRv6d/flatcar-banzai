@@ -5,12 +5,22 @@ storage:
     - device: /dev/sdb
       format: ext4
       label: data1
+  directories:
+    - path: /mnt/data/bitcoind
+      user:
+        name: bitcoind
+  files:
+    - path: /etc/bitcoin/bitcoin.conf
+      contents:
+        local: bitcoin/bitcoin.conf
 passwd:
   users:
     - name: marvin.vogt
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOELWzSrWOfYX4B7v0kYnIyQT3M3wVV1c6X+LpoJFDcI
       groups: [sudo, docker]
+    - name: bitcoind
+      system: true
 systemd:
   units:
     - name: mnt-data.mount
