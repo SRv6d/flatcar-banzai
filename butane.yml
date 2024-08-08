@@ -36,3 +36,16 @@ systemd:
 
         [Install]
         WantedBy=multi-user.target
+    - name: bitcoind.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Bitcoin Core
+        
+        [Service]
+        ExecStart=/usr/bin/bitcoind
+        Restart=always
+        RestartSec=5s
+        
+        [Install]
+        WantedBy=multi-user.target
