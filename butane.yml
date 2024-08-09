@@ -6,8 +6,11 @@ storage:
       format: ext4
       label: data1
   directories:
-    - path: /mnt/data/bitcoind
+    - path: /mnt/data/bitcoin
+      mode: 755
       user:
+        name: bitcoind
+      group:
         name: bitcoind
   files:
     - path: /etc/bitcoin/bitcoin.conf
@@ -21,6 +24,7 @@ passwd:
       groups: [sudo, docker]
     - name: bitcoind
       system: true
+      noCreateHome: true
 systemd:
   units:
     - name: mnt-data.mount
@@ -34,18 +38,5 @@ systemd:
         Where=/mnt/data
         Type=ext4
 
-        [Install]
-        WantedBy=multi-user.target
-    - name: bitcoind.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=Bitcoin Core
-        
-        [Service]
-        ExecStart=/usr/bin/bitcoind
-        Restart=always
-        RestartSec=5s
-        
         [Install]
         WantedBy=multi-user.target

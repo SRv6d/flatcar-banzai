@@ -1,10 +1,18 @@
 [Unit]
 Description=Bitcoin Core
+After=network-online.target
 
 [Service]
-ExecStart=/usr/bin/bitcoind
+Type=exec
+ExecStart=/usr/bin/bitcoind \
+    -conf=/etc/bitcoin/bitcoin.conf \
+    -datadir=/mnt/data/bitcoin
+TimeoutStopSec=60
 Restart=always
 RestartSec=5s
+ConfigurationDirectory=bitcoin
+User=bitcoin
+Group=bitcoin
 
 [Install]
 WantedBy=multi-user.target
