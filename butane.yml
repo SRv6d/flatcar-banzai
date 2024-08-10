@@ -18,6 +18,12 @@ storage:
         name: electrs
       group:
         name: electrs
+    - path: /mnt/data/esplora
+      mode: 0755
+      user:
+        name: esplora
+      group:
+        name: esplora
   files:
     - path: /etc/bitcoin/bitcoin.conf
       contents:
@@ -39,6 +45,9 @@ passwd:
       system: true
       no_create_home: true
     - name: electrs
+      system: true
+      no_create_home: true
+    - name: esplora
       system: true
       no_create_home: true
 systemd:
