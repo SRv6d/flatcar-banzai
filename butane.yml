@@ -74,6 +74,7 @@ systemd:
             --pull always \
             -v /etc/electrs:/etc/electrs:ro \
             -v /mnt/data/electrs:/mnt/data/electrs:rw \
+            --net=host \
             srv6d/electrs:0.10.5
         ExecStop=/usr/bin/docker stop electrs
         Restart=always
