@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim as base
+FROM debian:bookworm-slim AS base
 
 LABEL org.opencontainers.image.title="electrs"
 LABEL org.opencontainers.image.vendor="Marvin Vogt <m@rvinvogt.com>"
@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   && rm -rf /var/lib/apt/lists/*
 
 
-FROM base as build
+FROM base AS build
 ARG VERSION
 RUN apt-get update && apt-get install --no-install-recommends -y \
   cargo \
@@ -27,6 +27,6 @@ ENV ROCKSDB_LIB_DIR=/usr/lib
 RUN cargo build --release --locked
 
 
-FROM base as result
+FROM base AS result
 COPY --from=build /build/target/release/electrs /app/electrs
 ENTRYPOINT ["/app/electrs"]
