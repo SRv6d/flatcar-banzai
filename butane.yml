@@ -35,7 +35,7 @@ passwd:
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOELWzSrWOfYX4B7v0kYnIyQT3M3wVV1c6X+LpoJFDcI
       groups: [sudo, docker]
-    - name: bitcoin
+    - name: bitcoind
       system: true
       no_create_home: true
     - name: electrs
