@@ -12,6 +12,12 @@ storage:
         name: bitcoind
       group:
         name: bitcoind
+    - path: /mnt/data/electrs
+      mode: 755
+      user:
+        name: electrs
+      group:
+        name: electrs
   files:
     - path: /etc/bitcoin/bitcoin.conf
       contents:
@@ -23,6 +29,9 @@ passwd:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOELWzSrWOfYX4B7v0kYnIyQT3M3wVV1c6X+LpoJFDcI
       groups: [sudo, docker]
     - name: bitcoind
+      system: true
+      noCreateHome: true
+    - name: electrs
       system: true
       noCreateHome: true
 systemd:
