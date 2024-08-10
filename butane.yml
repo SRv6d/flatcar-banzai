@@ -7,13 +7,13 @@ storage:
       label: data1
   directories:
     - path: /mnt/data/bitcoin
-      mode: 755
+      mode: 0755
       user:
         name: bitcoind
       group:
         name: bitcoind
     - path: /mnt/data/electrs
-      mode: 755
+      mode: 0755
       user:
         name: electrs
       group:
@@ -25,6 +25,10 @@ storage:
     - path: /etc/electrs/config.toml
       contents:
         local: electrs/config.toml
+    # - path: /etc/extensions/bitcoin.raw
+    #   mode: 0644
+    #   contents:
+    #     source: https://filebin.net/8smw1ra4g22u1xk8/bitcoin.raw
 passwd:
   users:
     - name: marvin.vogt
@@ -33,10 +37,10 @@ passwd:
       groups: [sudo, docker]
     - name: bitcoind
       system: true
-      noCreateHome: true
+      no_create_home: true
     - name: electrs
       system: true
-      noCreateHome: true
+      no_create_home: true
 systemd:
   units:
     - name: mnt-data.mount
@@ -66,8 +70,8 @@ systemd:
         ExecStart=/usr/bin/docker run \
             --name electrs \
             --pull always \
-            -v /etc/electrs:/etc/electrs:ro
-            -v /mnt/data/electrs:/mnt/data/electrs:rw
+            -v /etc/electrs:/etc/electrs:ro \
+            -v /mnt/data/electrs:/mnt/data/electrs:rw \
             srv6d/electrs:0.10.5
 
         ExecStop=/usr/bin/docker stop electrs
