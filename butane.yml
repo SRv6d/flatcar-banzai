@@ -65,7 +65,6 @@ systemd:
         Description=Electrs electrum server
         Requires=bitcoind.service
         Requires=mnt-data.mount
-        ConditionPathExists=/run/bitcoin/cookie
 
         [Service]
         TimeoutStartSec=0
@@ -76,7 +75,6 @@ systemd:
             -v /etc/electrs:/etc/electrs:ro \
             -v /mnt/data/electrs:/mnt/data/electrs:rw \
             srv6d/electrs:0.10.5
-
         ExecStop=/usr/bin/docker stop electrs
         Restart=always
         RestartSec=5s

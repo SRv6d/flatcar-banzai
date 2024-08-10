@@ -1,3 +1,2 @@
-cookie_file = "/run/bitcoin/cookie"
 db_dir = "/mnt/data/electrs"
 network = "bitcoin"
