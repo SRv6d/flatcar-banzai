@@ -63,6 +63,9 @@ systemd:
       contents: |
         [Unit]
         Description=Electrs electrum server
+        Requires=bitcoind.service
+        Requires=mnt-data.mount
+        ConditionPathExists=/run/bitcoin/cookie
 
         [Service]
         TimeoutStartSec=0
