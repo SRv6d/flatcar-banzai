@@ -1,0 +1,57 @@
+---
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: write
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  COLUMNS: 120
+  RELEASE_NAME: ${{ github.RUN_ID }}
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: gh release create ${{ env.RELEASE_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build-sysext-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: bitcoin
+            version: 27.1
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v1
+
+      - name: Build ${{ matrix.name }} sysext
+        run: just build-sysext ${{ matrix.name }} ${{ matrix.version }}
+
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "*.raw"
+
+      - name: Upload ${{ matrix.name }} sysext
+        run: gh release upload ${{ env.RELEASE_NAME }} *.raw
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
