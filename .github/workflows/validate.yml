@@ -1,0 +1,59 @@
+---
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  COLUMNS: 120
+
+jobs:
+  validate-butane:
+    runs-on: ubuntu-latest
+    env:
+      BUTANE_VERSION: v0.21.0
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Butane Transpiler
+        run: >-
+          gh release download
+          ${{ env.BUTANE_VERSION }}
+          --repo coreos/butane
+          --pattern butane-x86_64-unknown-linux-gnu
+          --output butane
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - run: chmod +x butane
+
+      - name: Validate Butane Configuration
+        run: ./butane --files-dir . --check --strict butane.yml
+  validate-justfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v1
+      - run: just --check --fmt
+        env:
+          JUST_UNSTABLE: true
+  lint-dockerfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          recursive: true
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check for typos
+        uses: crate-ci/typos@v1.23.6
