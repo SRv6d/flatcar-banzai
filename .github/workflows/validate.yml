@@ -28,5 +28,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - run: chmod +x butane
+
       - name: Validate Butane Configuration
         run: ./butane --files-dir . --check --strict butane.yml
