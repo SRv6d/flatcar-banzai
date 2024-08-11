@@ -1,0 +1,21 @@
+---
+name: Validate
+
+on: push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  COLUMNS: 120
+
+jobs:
+  validate-butane:
+    runs-on: ubuntu-latest
+    container: quay.io/coreos/butane:v0.21.0
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Butane Configuration
+        run: butane --files-dir . --check --strict butane.yml
