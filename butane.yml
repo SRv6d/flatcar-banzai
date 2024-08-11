@@ -31,10 +31,12 @@ storage:
     - path: /etc/electrs/config.toml
       contents:
         local: electrs/config.toml
-    # - path: /etc/extensions/bitcoin.raw
-    #   mode: 0644
-    #   contents:
-    #     source: https://filebin.net/8smw1ra4g22u1xk8/bitcoin.raw
+    - path: /etc/extensions/bitcoin-27.1-x86-64.raw
+      mode: 0644
+      contents:
+        source: https://github.com/SRv6d/flatcar-banzai/releases/download/10341053369/bitcoin-27.1-x86-64.raw
+        verification:
+          hash: sha256-2335c544320fdb9fde02c2b226f534aea7ac4e6947cd58894a04ea50750e9fd7
 passwd:
   users:
     - name: marvin.vogt
