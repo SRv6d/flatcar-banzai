@@ -43,6 +43,11 @@ jobs:
       - name: Build ${{ matrix.name }} sysext
         run: just build-sysext ${{ matrix.name }} ${{ matrix.version }}
 
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "*.raw"
+
       - name: Upload ${{ matrix.name }} sysext
         run: gh release upload ${{ env.RELEASE_NAME }} *.raw
         env:
