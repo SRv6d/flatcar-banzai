@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3008
 FROM debian:bookworm-slim AS base
 
 LABEL org.opencontainers.image.title="electrs"
