@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: extractions/setup-just@v1
+      - uses: extractions/setup-just@v2
 
       - name: Build ${{ matrix.name }} sysext
         run: just build-sysext ${{ matrix.name }} ${{ matrix.version }}
