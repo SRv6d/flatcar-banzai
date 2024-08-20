@@ -39,6 +39,8 @@ storage:
           hash: sha256-2335c544320fdb9fde02c2b226f534aea7ac4e6947cd58894a04ea50750e9fd7
 passwd:
   users:
+    - name: core
+      shell: /sbin/nologin
     - name: marvin.vogt
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOELWzSrWOfYX4B7v0kYnIyQT3M3wVV1c6X+LpoJFDcI
