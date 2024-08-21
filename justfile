@@ -1,5 +1,6 @@
 BUTANE_VERSION := "v0.21.0"
 BUTANE_BIN := "butane-" + arch() + "-" + if os() == "macos" { "apple-darwin" } else { "unknown-linux-gnu" }
+BUTANE_CFG := "butane.yml"
 
 build-sysext name version="latest" arch="x86-64": squashfs_tools
     #!/usr/bin/env bash
@@ -8,8 +9,11 @@ build-sysext name version="latest" arch="x86-64": squashfs_tools
     PATH="{{ name }}/"sysext"/$EXT_NAME"
     /usr/bin/mksquashfs $PATH $EXT_NAME.raw
 
-transpile-butane input="butane.yml" output="ignition.json": _get_butane_bin && _cleanup_butane_bin
-    ./{{ BUTANE_BIN }} --files-dir . --strict {{ input }} > {{ output }}
+validate-butane output="ignition.json": _get_butane_bin && _cleanup_butane_bin
+    ./{{ BUTANE_BIN }} --files-dir . --strict --check {{ BUTANE_CFG }}
+
+transpile-butane output="ignition.json": _get_butane_bin && _cleanup_butane_bin
+    ./{{ BUTANE_BIN }} --files-dir . --strict {{ BUTANE_CFG }} > {{ output }}
 
 squashfs_tools:
     sudo apt install squashfs-tools
