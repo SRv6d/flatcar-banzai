@@ -9,8 +9,6 @@ on:
 permissions:
   id-token: write
   attestations: write
-  contents: write
-  packages: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
@@ -21,14 +19,6 @@ env:
   RELEASE_NAME: ${{ github.RUN_ID }}
 
 jobs:
-  create-release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: gh release create ${{ env.RELEASE_NAME }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-sysext-image:
     strategy:
       fail-fast: false
@@ -36,7 +26,6 @@ jobs:
         include:
           - name: bitcoin
             version: 27.1
-    needs: create-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +40,9 @@ jobs:
         with:
           subject-path: "*.raw"
 
-      - name: Upload ${{ matrix.name }} sysext
-        run: gh release upload ${{ env.RELEASE_NAME }} *.raw
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload sysext as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sysext-${{ matrix.name }}
+          if-no-files-found: error
+          path: "*.raw"
