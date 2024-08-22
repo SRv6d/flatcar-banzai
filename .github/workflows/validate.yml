@@ -24,6 +24,12 @@ jobs:
 
       - name: Validate Butane Configuration
         run: just validate-butane
+  validate-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check
   validate-justfile:
     runs-on: ubuntu-latest
     steps:
