@@ -1,6 +1,6 @@
 BUTANE_VERSION := "v0.21.0"
 BUTANE_BIN := "butane-" + arch() + "-" + if os() == "macos" { "apple-darwin" } else { "unknown-linux-gnu" }
-BUTANE_CFG := "butane.yml"
+BUTANE_CFG := "butane.yaml"
 
 build-sysext name version="latest" arch="x86-64": squashfs_tools
     #!/usr/bin/env bash
