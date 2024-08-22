@@ -14,6 +14,21 @@ resource "openstack_networking_subnet_v2" "subnet-v6" {
   subnetpool_id = "f541f3b6-af22-435a-9cbb-b233d12e74f4"
   tenant_id     = var.project_id
 }
+data "openstack_networking_network_v2" "provider" {
+  name = "provider"
+}
+resource "openstack_networking_router_v2" "router" {
+  admin_state_up      = true
+  external_network_id = data.openstack_networking_network_v2.provider.id
+}
+resource "openstack_networking_router_interface_v2" "router-interface-v4" {
+  router_id = openstack_networking_router_v2.router.id
+  subnet_id = openstack_networking_subnet_v2.subnet-v4.id
+}
+resource "openstack_networking_router_interface_v2" "router-interface-v6" {
+  router_id = openstack_networking_router_v2.router.id
+  subnet_id = openstack_networking_subnet_v2.subnet-v6.id
+}
 
 resource "openstack_networking_secgroup_v2" "allow-all" {
   name        = "allow-all"
