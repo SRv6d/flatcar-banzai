@@ -8,10 +8,13 @@ resource "openstack_networking_subnet_v2" "subnet-v4" {
   cidr       = "172.31.255.0/24"
   tenant_id  = var.project_id
 }
+data "openstack_networking_subnetpool_v2" "customer-v6" {
+  name = "customer-ipv6"
+}
 resource "openstack_networking_subnet_v2" "subnet-v6" {
   network_id    = openstack_networking_network_v2.network.id
   ip_version    = 6
-  subnetpool_id = "f541f3b6-af22-435a-9cbb-b233d12e74f4"
+  subnetpool_id = data.openstack_networking_subnetpool_v2.customer-v6.id
   tenant_id     = var.project_id
 }
 data "openstack_networking_network_v2" "provider" {
