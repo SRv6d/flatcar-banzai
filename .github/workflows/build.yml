@@ -46,3 +46,25 @@ jobs:
           name: sysext-${{ matrix.name }}
           if-no-files-found: error
           path: "*.raw"
+  transpile-butane:
+    needs: build-sysext-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Transpile Butane
+        run: just transpile-butane
+
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ignition.json
+
+      - name: Upload ignition as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ignition
+          if-no-files-found: error
+          path: ignition.json
