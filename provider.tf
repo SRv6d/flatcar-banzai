@@ -10,6 +10,8 @@ terraform {
 
 provider "openstack" {
   tenant_id = var.project_id
-  auth_url  = "https://identity.optimist.gec.io/v3"
-  region    = "fra"
+  user_name = var.user_name
+  password  = var.password
+  auth_url  = var.auth_url
+  region    = var.region
 }

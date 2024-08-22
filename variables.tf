@@ -1,5 +1,25 @@
 variable "project_id" {
   type        = string
   description = "OpenStack project ID"
-  default     = "1a060e5f03da47bbaf1220a6f3cc2f77"
+}
+
+variable "user_name" {
+  type        = string
+  description = "OpenStack username"
+}
+
+variable "password" {
+  type        = string
+  description = "OpenStack password"
+  sensitive   = true
+}
+
+variable "auth_url" {
+  type        = string
+  description = "OpenStack Keystone URL"
+}
+
+variable "region" {
+  type        = string
+  description = "OpenStack region"
 }
