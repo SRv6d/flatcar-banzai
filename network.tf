@@ -3,19 +3,22 @@ resource "openstack_networking_network_v2" "network" {
   tenant_id = var.project_id
 }
 resource "openstack_networking_subnet_v2" "subnet-v4" {
-  network_id = openstack_networking_network_v2.network.id
-  ip_version = 4
-  cidr       = "172.31.255.0/24"
-  tenant_id  = var.project_id
+  network_id  = openstack_networking_network_v2.network.id
+  ip_version  = 4
+  cidr        = "172.31.255.0/24"
+  enable_dhcp = true
+  tenant_id   = var.project_id
 }
 data "openstack_networking_subnetpool_v2" "customer-v6" {
   name = "customer-ipv6"
 }
 resource "openstack_networking_subnet_v2" "subnet-v6" {
-  network_id    = openstack_networking_network_v2.network.id
-  ip_version    = 6
-  subnetpool_id = data.openstack_networking_subnetpool_v2.customer-v6.id
-  tenant_id     = var.project_id
+  network_id        = openstack_networking_network_v2.network.id
+  ip_version        = 6
+  subnetpool_id     = data.openstack_networking_subnetpool_v2.customer-v6.id
+  enable_dhcp       = true
+  ipv6_address_mode = "dhcpv6-stateful"
+  tenant_id         = var.project_id
 }
 data "openstack_networking_network_v2" "provider" {
   name = "provider"
