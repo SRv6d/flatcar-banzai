@@ -29,3 +29,8 @@ variable "cf_api_token" {
   description = "CloudFlare API token"
   sensitive   = true
 }
+
+variable "cf_zone_id" {
+  type        = string
+  description = "CloudFlare DNS Zone ID"
+}
