@@ -18,6 +18,7 @@ resource "openstack_networking_subnet_v2" "subnet-v6" {
   subnetpool_id     = data.openstack_networking_subnetpool_v2.customer-v6.id
   enable_dhcp       = true
   ipv6_address_mode = "dhcpv6-stateful"
+  ipv6_ra_mode      = "dhcpv6-stateful"
   tenant_id         = var.project_id
 }
 data "openstack_networking_network_v2" "provider" {
