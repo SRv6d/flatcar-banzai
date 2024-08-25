@@ -1,13 +1,13 @@
 resource "openstack_networking_network_v2" "network" {
   name      = "banzai-network"
-  tenant_id = var.project_id
+  tenant_id = var.os_project_id
 }
 resource "openstack_networking_subnet_v2" "subnet-v4" {
   network_id  = openstack_networking_network_v2.network.id
   ip_version  = 4
   cidr        = "172.31.255.0/24"
   enable_dhcp = true
-  tenant_id   = var.project_id
+  tenant_id   = var.os_project_id
 }
 data "openstack_networking_subnetpool_v2" "customer-v6" {
   name = "customer-ipv6"
@@ -19,7 +19,7 @@ resource "openstack_networking_subnet_v2" "subnet-v6" {
   enable_dhcp       = true
   ipv6_address_mode = "dhcpv6-stateful"
   ipv6_ra_mode      = "dhcpv6-stateful"
-  tenant_id         = var.project_id
+  tenant_id         = var.os_project_id
 }
 data "openstack_networking_network_v2" "provider" {
   name = "provider"
@@ -40,7 +40,7 @@ resource "openstack_networking_router_interface_v2" "router-interface-v6" {
 resource "openstack_networking_secgroup_v2" "allow-all" {
   name        = "allow-all"
   description = "Allow all inbound traffic"
-  tenant_id   = var.project_id
+  tenant_id   = var.os_project_id
 }
 resource "openstack_networking_secgroup_rule_v2" "allow-v4-udp" {
   direction         = "ingress"
