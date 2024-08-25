@@ -21,6 +21,9 @@ resource "openstack_networking_subnet_v2" "subnet-v6" {
   ipv6_ra_mode      = "dhcpv6-stateful"
   tenant_id         = var.os_project_id
 }
+resource "openstack_networking_floatingip_v2" "default" {
+  pool = "provider"
+}
 data "openstack_networking_network_v2" "provider" {
   name = "provider"
 }

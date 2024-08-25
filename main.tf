@@ -24,10 +24,9 @@ resource "openstack_compute_instance_v2" "instance" {
 
   user_data = file("ignition.json")
 }
-resource "openstack_networking_floatingip_v2" "default" {
-  pool      = "provider"
-  port_id   = openstack_compute_instance_v2.instance.network[0].port
-  tenant_id = var.os_project_id
+resource "openstack_compute_floatingip_associate_v2" "default" {
+  floating_ip = openstack_networking_floatingip_v2.default.address
+  instance_id = openstack_compute_instance_v2.instance.id
 }
 resource "openstack_compute_volume_attach_v2" "attached" {
   instance_id = openstack_compute_instance_v2.instance.id
