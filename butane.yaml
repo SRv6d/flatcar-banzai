@@ -37,6 +37,9 @@ storage:
         source: https://github.com/SRv6d/flatcar-banzai/releases/download/10341053369/bitcoin-27.1-x86-64.raw
         verification:
           hash: sha256-f9f63fe90827c47ce25299e323568f4ab0766932a7211024efbefffee1a478cc
+    - path: /etc/netdata/netdata.conf
+      contents:
+        local: netdata/netdata.conf
 passwd:
   users:
     - name: core
@@ -116,6 +119,45 @@ systemd:
         ExecStop=/usr/bin/docker stop esplora
         Restart=always
         RestartSec=5s
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: netdata.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Netdata
+        Requires=mnt-data.mount
+
+        [Service]
+        TimeoutStartSec=0
+        ExecStartPre=-/usr/bin/docker rm --force netdata
+        ExecStart=/usr/bin/docker run \
+            --name=netdata \
+            --pull always \
+            --pid=host \
+            --network=host \
+            -v /etc/netdata:/etc/netdata \
+            -v netdatalib:/var/lib/netdata \
+            -v netdatacache:/var/cache/netdata \
+            -v /run/netdata:/run/netdata \
+            -v /:/host/root:ro,rslave \
+            -v /etc/passwd:/host/etc/passwd:ro \
+            -v /etc/group:/host/etc/group:ro \
+            -v /proc:/host/proc:ro \
+            -v /sys:/host/sys:ro \
+            -v /etc/os-release:/host/etc/os-release:ro \
+            -v /var/log:/host/var/log:ro \
+            -v /var/run/docker.sock:/var/run/docker.sock:ro \
+            -v /run/dbus:/run/dbus:ro \
+            --cap-add SYS_PTRACE \
+            --cap-add SYS_ADMIN \
+            --security-opt apparmor=unconfined \
+            netdata/netdata
+        ExecStop=/usr/bin/docker stop netdata
+        Restart=always
+        RestartSec=5s
+        RuntimeDirectory=netdata
 
         [Install]
         WantedBy=multi-user.target
