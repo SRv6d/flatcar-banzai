@@ -36,7 +36,7 @@ storage:
       contents:
         source: https://github.com/SRv6d/flatcar-banzai/releases/download/10341053369/bitcoin-27.1-x86-64.raw
         verification:
-          hash: sha256-2335c544320fdb9fde02c2b226f534aea7ac4e6947cd58894a04ea50750e9fd7
+          hash: sha256-f9f63fe90827c47ce25299e323568f4ab0766932a7211024efbefffee1a478cc
 passwd:
   users:
     - name: core
