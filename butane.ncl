@@ -110,27 +110,52 @@
       {
         name = "mnt-data.mount",
         enabled = true,
-        contents = "[Unit]\nDescription=Data mount\n\n[Mount]\nWhat=/dev/disk/by-label/data1\nWhere=/mnt/data\nType=ext4\n\n[Install]\nWantedBy=multi-user.target\n"
+        contents = m%"
+          [Unit]
+          Description=Data mount
+
+          [Mount]
+          What=/dev/disk/by-label/data1
+          Where=/mnt/data
+          Type=ext4
+
+          [Install]
+          WantedBy=multi-user.target
+        "%
       },
       {
         name = "docker.service",
         enabled = true
       },
       {
-        name = "electrs.service",
-        enabled = false,
-        contents = "[Unit]\nDescription=Electrs electrum server\nRequires=bitcoind.service\nRequires=mnt-data.mount\n\n[Service]\nTimeoutStartSec=0\nExecStartPre=-/usr/bin/docker rm --force electrs\nExecStart=/usr/bin/docker run \\\n    --name electrs \\\n    --pull always \\\n    -v /etc/electrs:/etc/electrs:ro \\\n    -v /mnt/data/electrs:/mnt/data/electrs:rw \\\n    --net=host \\\n    srv6d/electrs:0.10.5\nExecStop=/usr/bin/docker stop electrs\nRestart=always\nRestartSec=5s\n\n[Install]\nWantedBy=multi-user.target\n"
-      },
-      {
         name = "esplora.service",
         enabled = true,
-        contents = "[Unit]\nDescription=Esplora mainnet electrum server\nRequires=bitcoind.service\nRequires=mnt-data.mount\n\n[Service]\nTimeoutStartSec=0\nExecStartPre=-/usr/bin/docker rm --force esplora\nExecStart=/usr/bin/docker run \\\n    --name esplora \\\n    --pull always \\\n    -v /etc/esplora:/etc/esplora:ro \\\n    -v /mnt/data/esplora:/mnt/data/esplora:rw \\\n    --net=host \\\n    blockstream/esplora\nExecStop=/usr/bin/docker stop esplora\nRestart=always\nRestartSec=5s\n\n[Install]\nWantedBy=multi-user.target\n"
+        contents = m%"
+          [Unit]
+          Description=Esplora mainnet electrum server
+          Requires=bitcoind.service
+          Requires=mnt-data.mount
+
+          [Service]
+          TimeoutStartSec=0
+          ExecStartPre=-/usr/bin/docker rm --force esplora
+          ExecStart=/usr/bin/docker run \
+              --name esplora \
+              --pull always \
+              -v /etc/esplora:/etc/esplora:ro \
+              -v /mnt/data/esplora:/mnt/data/esplora:rw \
+              --net=host \
+              blockstream/esplora
+          ExecStop=/usr/bin/docker stop esplora
+          Restart=always
+          RestartSec=5s
+
+          [Install]
+          WantedBy=multi-user.target
+        "%
       },
-      {
-        name = "netdata.service",
-        enabled = true,
-        contents = "[Unit]\nDescription=Netdata\nRequires=mnt-data.mount\n\n[Service]\nTimeoutStartSec=0\nExecStartPre=-/usr/bin/docker rm --force netdata\nExecStart=/usr/bin/docker run \\\n    --name=netdata \\\n    --pull always \\\n    --pid=host \\\n    --network=host \\\n    -v /etc/netdata:/etc/netdata \\\n    -v netdatalib:/var/lib/netdata \\\n    -v netdatacache:/var/cache/netdata \\\n    -v /run/netdata:/run/netdata \\\n    -v /:/host/root:ro,rslave \\\n    -v /etc/passwd:/host/etc/passwd:ro \\\n    -v /etc/group:/host/etc/group:ro \\\n    -v /proc:/host/proc:ro \\\n    -v /sys:/host/sys:ro \\\n    -v /etc/os-release:/host/etc/os-release:ro \\\n    -v /var/log:/host/var/log:ro \\\n    -v /var/run/docker.sock:/var/run/docker.sock:ro \\\n    -v /run/dbus:/run/dbus:ro \\\n    --cap-add SYS_PTRACE \\\n    --cap-add SYS_ADMIN \\\n    --security-opt apparmor=unconfined \\\n    netdata/netdata\nExecStop=/usr/bin/docker stop netdata\nRestart=always\nRestartSec=5s\nRuntimeDirectory=netdata\n\n[Install]\nWantedBy=multi-user.target\n"
-      }
+      import "electrs/service.ncl",
+      import "netdata/service.ncl"
     ]
   }
 }
