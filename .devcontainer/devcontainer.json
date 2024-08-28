@@ -7,7 +7,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["nefrob.vscode-just-syntax"]
+      "extensions": ["nefrob.vscode-just-syntax", "tweag.vscode-nickel"]
     }
   }
 }
