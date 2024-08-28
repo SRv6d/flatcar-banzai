@@ -12,7 +12,10 @@ build-sysext name version="latest" arch="x86-64": squashfs_tools
     PATH="{{ name }}/"sysext"/$EXT_NAME"
     /usr/bin/mksquashfs $PATH $EXT_NAME.raw
 
-validate: validate-nickel validate-butane validate-terraform
+validate: validate-justfile validate-nickel validate-butane validate-terraform
+
+validate-justfile:
+    just --check --fmt --unstable
 
 validate-nickel file="butane.ncl": (_get_gh_bin "tweag" "nickel" NICKEL_VERSION NICKEL_BIN)
     {{ BIN_DIR }}/{{ NICKEL_BIN }} typecheck {{ file }}
