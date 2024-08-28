@@ -19,6 +19,9 @@ validate-nickel file: (_get_gh_bin "tweag" "nickel" NICKEL_VERSION NICKEL_BIN)
 validate-butane: _get_butane_bin
     {{ BIN_DIR }}/{{ BUTANE_BIN }} --files-dir . --strict --check {{ BUTANE_CFG }}
 
+validate-terraform:
+    terraform fmt -check
+
 transpile-butane output="ignition.json": _get_butane_bin
     {{ BIN_DIR }}/{{ BUTANE_BIN }} --files-dir . --strict {{ BUTANE_CFG }} > {{ output }}
 
