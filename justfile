@@ -1,10 +1,8 @@
 BUTANE_VERSION := "v0.21.0"
 BUTANE_BIN := "butane-" + arch() + "-" + if os() == "macos" { "apple-darwin" } else { "unknown-linux-gnu" }
 BUTANE_CFG := "butane.yaml"
-
 NICKEL_VERSION := "1.7.0"
 NICKEL_BIN := "nickel-" + (if arch() == "aarch64" { "arm64" } else { arch() }) + "-" + if os() == "macos" { "apple-darwin" } else { "linux" }
-
 BIN_DIR := justfile_directory() / ".just" / "bin"
 
 build-sysext name version="latest" arch="x86-64": squashfs_tools
