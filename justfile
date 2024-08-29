@@ -3,6 +3,8 @@ BUTANE_BIN := "butane-" + arch() + "-" + if os() == "macos" { "apple-darwin" } e
 BUTANE_CFG := "butane.yaml"
 NICKEL_VERSION := "1.7.0"
 NICKEL_BIN := "nickel-" + (if arch() == "aarch64" { "arm64" } else { arch() }) + "-" + if os() == "macos" { "apple-darwin" } else { "linux" }
+HADOLINT_VERSION := "v2.12.0"
+HADOLINT_BIN := "hadolint-" + (if os() == "macos" { "Darwin" } else { "Linux" }) + "-" + if arch() == "aarch64" { "arm64" } else { arch() }
 BIN_DIR := justfile_directory() / ".just" / "bin"
 
 build-sysext name version="latest" arch="x86-64": squashfs_tools
@@ -21,8 +23,8 @@ validate-nickel file="butane.ncl": (_get_gh_bin "tweag" "nickel" NICKEL_VERSION 
     {{ BIN_DIR }}/{{ NICKEL_BIN }} typecheck {{ file }}
     {{ BIN_DIR }}/{{ NICKEL_BIN }} eval {{ file }} > /dev/null
 
-validate-dockerfiles:
-    hadolint **/Dockerfile
+validate-dockerfiles: (_get_gh_bin "hadolint" "hadolint" HADOLINT_VERSION HADOLINT_BIN)
+    {{ BIN_DIR }}/{{ HADOLINT_BIN }} **/Dockerfile
 
 validate-butane: _get_butane_bin
     {{ BIN_DIR }}/{{ BUTANE_BIN }} --files-dir . --strict --check {{ BUTANE_CFG }}
