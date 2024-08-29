@@ -19,7 +19,7 @@ validate: validate-justfile validate-nickel validate-dockerfiles validate-butane
 validate-justfile:
     just --check --fmt --unstable
 
-validate-nickel file="butane.ncl": (_get_gh_bin "tweag" "nickel" NICKEL_VERSION NICKEL_BIN)
+validate-nickel file="butane.ncl": _get_nickel_bin
     {{ BIN_DIR }}/{{ NICKEL_BIN }} typecheck {{ file }}
     {{ BIN_DIR }}/{{ NICKEL_BIN }} eval {{ file }} > /dev/null
 
@@ -32,11 +32,13 @@ validate-butane: _get_butane_bin
 validate-terraform:
     terraform fmt -check
 
-transpile-butane output="ignition.json": _get_butane_bin
-    {{ BIN_DIR }}/{{ BUTANE_BIN }} --files-dir . --strict {{ BUTANE_CFG }} > {{ output }}
+transpile-butane output="ignition.json": _get_nickel_bin _get_butane_bin
+    {{ BIN_DIR }}/{{ NICKEL_BIN }} export --format yaml butane.ncl | {{ BIN_DIR }}/{{ BUTANE_BIN }} --files-dir . --strict > {{ output }}
 
 squashfs_tools:
     sudo apt install squashfs-tools
+
+_get_nickel_bin: (_get_gh_bin "tweag" "nickel" NICKEL_VERSION NICKEL_BIN)
 
 _get_butane_bin: (_get_gh_bin "coreos" "butane" BUTANE_VERSION BUTANE_BIN)
 
