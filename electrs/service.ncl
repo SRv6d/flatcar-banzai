@@ -1,23 +1,23 @@
 {
-  name = "esplora.service",
+  name = "electrs.service",
   enabled = true,
   contents = m%"
     [Unit]
-    Description=Esplora mainnet electrum server
+    Description=Electrs electrum server
     Requires=bitcoind.service
     Requires=mnt-data.mount
 
     [Service]
     TimeoutStartSec=0
-    ExecStartPre=-/usr/bin/docker rm --force esplora
+    ExecStartPre=-/usr/bin/docker rm --force electrs
     ExecStart=/usr/bin/docker run \
-        --name esplora \
+        --name electrs \
         --pull always \
-        -v /etc/esplora:/etc/esplora:ro \
-        -v /mnt/data/esplora:/mnt/data/esplora:rw \
+        -v /etc/electrs:/etc/electrs:ro \
+        -v /mnt/data/electrs:/mnt/data/electrs:rw \
         --net=host \
-        blockstream/esplora
-    ExecStop=/usr/bin/docker stop esplora
+        srv6d/electrs:0.10.5
+    ExecStop=/usr/bin/docker stop electrs
     Restart=always
     RestartSec=5s
 
