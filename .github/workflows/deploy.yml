@@ -27,6 +27,8 @@ jobs:
           - name: bitcoin
             version: 27.1
     runs-on: ubuntu-latest
+    outputs:
+      bitcoin_url: ${{ steps.upload-sysext.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -42,6 +44,7 @@ jobs:
 
       - name: Upload sysext as artifact
         uses: actions/upload-artifact@v4
+        id: upload-sysext
         with:
           name: sysext-${{ matrix.name }}
           if-no-files-found: error
@@ -56,6 +59,8 @@ jobs:
 
       - name: Transpile Butane
         run: just transpile-butane
+        env:
+          BITCOIN_SYSEXT_URL: ${{ needs.build-sysext-image.outputs.bitcoin_url }}
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
