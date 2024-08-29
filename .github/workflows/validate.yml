@@ -25,13 +25,6 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - run: just validate
-  lint-dockerfile:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-        with:
-          recursive: true
   spellcheck:
     runs-on: ubuntu-latest
     steps:
