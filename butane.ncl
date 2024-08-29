@@ -29,16 +29,6 @@
         group = {
           name = "electrs"
         }
-      },
-      {
-        path = "/mnt/data/esplora",
-        mode = 493,
-        user = {
-          name = "esplora"
-        },
-        group = {
-          name = "esplora"
-        }
       }
     ],
     files = [
@@ -97,11 +87,6 @@
         name = "electrs",
         system = true,
         no_create_home = true
-      },
-      {
-        name = "esplora",
-        system = true,
-        no_create_home = true
       }
     ]
   },
@@ -126,33 +111,6 @@
       {
         name = "docker.service",
         enabled = true
-      },
-      {
-        name = "esplora.service",
-        enabled = true,
-        contents = m%"
-          [Unit]
-          Description=Esplora mainnet electrum server
-          Requires=bitcoind.service
-          Requires=mnt-data.mount
-
-          [Service]
-          TimeoutStartSec=0
-          ExecStartPre=-/usr/bin/docker rm --force esplora
-          ExecStart=/usr/bin/docker run \
-              --name esplora \
-              --pull always \
-              -v /etc/esplora:/etc/esplora:ro \
-              -v /mnt/data/esplora:/mnt/data/esplora:rw \
-              --net=host \
-              blockstream/esplora
-          ExecStop=/usr/bin/docker stop esplora
-          Restart=always
-          RestartSec=5s
-
-          [Install]
-          WantedBy=multi-user.target
-        "%
       },
       import "electrs/service.ncl",
       import "netdata/service.ncl"
