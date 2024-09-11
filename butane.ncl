@@ -1,3 +1,5 @@
+let sysext_url = import "sysext.json" in
+
 {
   variant = "flatcar",
   version = "1.1.0",
@@ -48,10 +50,7 @@
         path = "/etc/extensions/bitcoin-27.1-x86-64.raw",
         mode = 420,
         contents = {
-          source = "https://github.com/SRv6d/flatcar-banzai/releases/download/10341053369/bitcoin-27.1-x86-64.raw",
-          verification = {
-            hash = "sha256-f9f63fe90827c47ce25299e323568f4ab0766932a7211024efbefffee1a478cc"
-          }
+          source = "%{sysext_url.bitcoin}",
         }
       },
       {
