@@ -57,10 +57,16 @@ jobs:
 
       - uses: extractions/setup-just@v2
 
+      - name: Write sysext urls
+        run: echo $JSON > sysext.json
+        env:
+          JSON: |
+            {
+              "bitcoin": "${{ needs.build-sysext-image.outputs.bitcoin_url }}"
+            }
+
       - name: Transpile Butane
         run: just transpile-butane
-        env:
-          BITCOIN_SYSEXT_URL: ${{ needs.build-sysext-image.outputs.bitcoin_url }}
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
