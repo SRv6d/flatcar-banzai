@@ -3,7 +3,8 @@
   "image": "mcr.microsoft.com/devcontainers/base:noble",
   "features": {
     "ghcr.io/guiyomh/features/just:0": {},
-    "ghcr.io/devcontainers/features/terraform:1": {}
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/srv6d/devcontainer-features/nickel:1": {}
   },
   "customizations": {
     "vscode": {
