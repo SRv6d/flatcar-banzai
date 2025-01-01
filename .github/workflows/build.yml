@@ -36,7 +36,7 @@ jobs:
         run: just build-sysext ${{ matrix.name }} ${{ matrix.version }}
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: "*.raw"
 
@@ -58,7 +58,7 @@ jobs:
         run: just transpile-butane
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: ignition.json
 
